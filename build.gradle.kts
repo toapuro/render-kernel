@@ -14,11 +14,11 @@ plugins {
 }
 
 object ModConfig {
-    const val MOD_ID = "examplemod"
-    const val MOD_NAME = "Example Mod"
+    const val MOD_ID = "renderkernel"
+    const val MOD_NAME = "RenderKernel"
     const val MOD_LICENSE = "MIT"
     const val MOD_VERSION = "0.1.0"
-    const val MOD_GROUP_ID = "io.github.toapuro.examplemod"
+    const val MOD_GROUP_ID = "io.github.toapuro.renderkernel"
     const val MOD_AUTHORS = "toapuro"
     const val MOD_DESCRIPTION = ""
     const val MOD_DISPLAY_URL = ""
