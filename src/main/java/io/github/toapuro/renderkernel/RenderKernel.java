@@ -8,6 +8,5 @@ public class RenderKernel {
     public static final String MODID = "renderkernel";
 
     public RenderKernel(FMLJavaModLoadingContext ctx) {
-//        ctx.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
     }
 }
