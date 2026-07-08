@@ -9,6 +9,12 @@ public final class FreeListAllocator {
     private final Long2LongRBTreeMap byOffset = new Long2LongRBTreeMap();
     private final Long2ObjectRBTreeMap<LongArrayList> bySize = new Long2ObjectRBTreeMap<>();
 
+    public static FreeListAllocator create(long initialSize) {
+        FreeListAllocator allocator = new FreeListAllocator();
+        allocator.add(0, initialSize);
+        return allocator;
+    }
+
     public void add(long offset, long size) {
         insert(offset, size);
     }

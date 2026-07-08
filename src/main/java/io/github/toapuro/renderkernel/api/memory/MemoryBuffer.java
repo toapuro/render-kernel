@@ -12,6 +12,10 @@ public class MemoryBuffer {
 
     private long pointer;
 
+    public void free() {
+        MemoryUtil.nmemFree(address);
+    }
+
     public void step(long steps) {
         pointer += steps;
     }

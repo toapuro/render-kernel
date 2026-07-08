@@ -1,14 +1,14 @@
 package io.github.toapuro.renderkernel.api.gl.buffer;
 
 import io.github.toapuro.renderkernel.api.gl.GlApi;
-import io.github.toapuro.renderkernel.api.util.BufferRange;
+import io.github.toapuro.renderkernel.api.memory.MemoryRef;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.lwjgl.opengl.*;
 
 @Getter
 @AllArgsConstructor
-public final class GlGpuBuffer implements GlBuffer, GlRangedBuffer {
+public final class GlGpuBuffer implements GlBuffer {
     private final int id = GL15.glGenBuffers();
 
     private long size;
@@ -19,27 +19,28 @@ public final class GlGpuBuffer implements GlBuffer, GlRangedBuffer {
     }
 
     @Override
-    public void upload(BufferTarget target, GlRef ref, BufferUsage usage) {
+    public void upload(BufferTarget target, MemoryRef ref, BufferUsage usage) {
         // TODO:アップロード方法の改善
         GlApi.getState().ensureBufferBound(target.gl, id);
         GL15C.nglBufferData(target.gl, ref.getSize(), ref.getAddress(), usage.gl);
         if(size > ref.getSize()) size = ref.getSize();
     }
 
-    public void uploadSub(BufferTarget target, long offset, GlRef ref) {
+    @Override
+    public GlGpuRef ref() {
+        return GlGpuRef.ref(id, 0, size);
+    }
+
+    public void uploadSub(BufferTarget target, long offset, MemoryRef ref) {
         // TODO:アップロード方法の改善
         GlApi.getState().ensureBufferBound(target.gl, id);
         GL15C.nglBufferSubData(target.gl, offset, ref.getSize(), ref.getAddress());
         if(size > ref.getSize()) size = ref.getSize();
     }
 
+    @Override
     public void release() {
         GL15.glDeleteBuffers(id);
-    }
-
-    @Override
-    public BufferRange getRange() {
-        return new BufferRange(0, (int) size);
     }
 
     @AllArgsConstructor
