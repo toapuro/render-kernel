@@ -4,7 +4,6 @@ import io.github.toapuro.renderkernel.api.BakeryApi;
 import io.github.toapuro.renderkernel.api.gl.buffer.GlBuffer;
 import io.github.toapuro.renderkernel.api.gl.buffer.GlGpuBuffer;
 import io.github.toapuro.renderkernel.api.gl.buffer.GlGpuRef;
-import io.github.toapuro.renderkernel.api.gl.buffer.array.GlArrayBuffer;
 import io.github.toapuro.renderkernel.api.pipeline.PipelineState;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -15,13 +14,11 @@ import org.lwjgl.opengl.GL11C;
 @Getter
 public class ElementsDrawPacket implements Dispatchable {
     private PipelineState state;
-    private GlArrayBuffer arrayBuffer;
     private GlBuffer vertexBuffer;
     private GlBuffer indexBuffer;
 
-    public void setup(PipelineState state, GlArrayBuffer arrayBuffer, GlBuffer vertexBuffer, GlBuffer indexBuffer) {
+    public void setup(PipelineState state, GlBuffer vertexBuffer, GlBuffer indexBuffer) {
         this.state = state;
-        this.arrayBuffer = arrayBuffer;
         this.vertexBuffer = vertexBuffer;
         this.indexBuffer = indexBuffer;
     }
