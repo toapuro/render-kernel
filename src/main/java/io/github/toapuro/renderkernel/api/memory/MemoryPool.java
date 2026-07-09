@@ -48,7 +48,7 @@ public final class MemoryPool {
         return new MemoryBuffer(newChunk.buffer.getAddress() + newOffset, size);
     }
 
-    public void free() {
+    public void clear() {
         for (Chunk chunk : chunks) {
             chunk.buffer.free();
         }
