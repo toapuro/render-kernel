@@ -9,9 +9,9 @@ import java.util.List;
 public final class DrawQueue {
     private final List<Dispatchable> drawPackets = new ArrayList<>();
 
-    private void submitElements(PipelineState pso, GlBuffer vertexBuffer, GlBuffer indexBuffer) {
+    private void submitElements(PipelineState pso, GlBuffer vertexBuffer, GlBuffer indexBuffer, int vertices) {
         ElementsDrawPacket packet = PacketObjectPools.ELEMENTS_POOL.acquire();
-        packet.setup(pso, vertexBuffer, indexBuffer);
+        packet.setup(pso, vertexBuffer, indexBuffer, vertices);
         this.drawPackets.add(packet);
     }
 
