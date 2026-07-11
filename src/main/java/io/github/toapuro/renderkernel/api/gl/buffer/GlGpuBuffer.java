@@ -7,11 +7,14 @@ import lombok.Getter;
 import org.lwjgl.opengl.*;
 
 @Getter
-@AllArgsConstructor
 public final class GlGpuBuffer implements GlBuffer {
-    private final int id = GL15.glGenBuffers();
-
+    private final int id;
     private long size;
+
+    public GlGpuBuffer(long size) {
+        this.id = GL15.glGenBuffers();
+        this.size = size;
+    }
 
     @Override
     public void bind(BufferTarget target) {

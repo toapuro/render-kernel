@@ -17,6 +17,6 @@ public final class MemoryRef {
     }
 
     public static MemoryRef bufferRef(MemoryBuffer buffer) {
-        return new MemoryRef(buffer.getAddress(), buffer.remaining());
+        return new MemoryRef(buffer.getAddress(), buffer.getSize());
     }
 }
