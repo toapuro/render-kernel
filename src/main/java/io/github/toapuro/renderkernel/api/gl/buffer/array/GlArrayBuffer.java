@@ -29,4 +29,8 @@ public class GlArrayBuffer {
     public void setAttribute(GlAttributeType attributeType, int index, int count, GlValueType type, boolean normalized, int vertexStride, long pointer) {
         attributeType.getSetup().setup(index, count, type.getGl(), normalized, vertexStride, pointer);
     }
+
+    public void release() {
+        GL30.glDeleteVertexArrays(id);
+    }
 }
