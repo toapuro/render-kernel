@@ -1,12 +1,14 @@
 package io.github.toapuro.renderkernel.api.pipeline;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.lwjgl.opengl.GL11;
 
 @Builder
 @Getter
+@EqualsAndHashCode
 public final class PipelineState {
     private final Polygon polygon;
     private final VertexLayout layout;
