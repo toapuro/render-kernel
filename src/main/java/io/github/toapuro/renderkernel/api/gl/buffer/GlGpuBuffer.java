@@ -4,12 +4,13 @@ import io.github.toapuro.renderkernel.api.gl.GlApi;
 import io.github.toapuro.renderkernel.api.memory.MemoryRef;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.lwjgl.opengl.*;
 
 @Getter
 public final class GlGpuBuffer implements GlBuffer {
     private final int id;
-    private long size;
+    private final long size;
 
     public GlGpuBuffer(long size) {
         this.id = GL15.glGenBuffers();
@@ -21,12 +22,13 @@ public final class GlGpuBuffer implements GlBuffer {
         GlApi.getState().ensureBufferBound(target.gl, id);
     }
 
+    @SneakyThrows
     @Override
     public void upload(BufferTarget target, MemoryRef ref, BufferUsage usage) {
-        // TODO:アップロード方法の改善
+        if (ref.getSize() > size) throw new IllegalAccessException("Memory access out of range");
+
         GlApi.getState().ensureBufferBound(target.gl, id);
-        GL15C.nglBufferData(target.gl, ref.getSize(), ref.getAddress(), usage.gl);
-        if(size > ref.getSize()) size = ref.getSize();
+        GL15C.nglBufferData(target.gl, ref.getSize(), ref.getOffset(), usage.gl);
     }
 
     @Override
@@ -34,11 +36,12 @@ public final class GlGpuBuffer implements GlBuffer {
         return GlGpuRef.ref(id, 0, size);
     }
 
+    @SneakyThrows
     public void uploadSub(BufferTarget target, long offset, MemoryRef ref) {
-        // TODO:アップロード方法の改善
+        if (ref.getOffset() + ref.getSize() > size) throw new IllegalAccessException("Memory access out of range");
+
         GlApi.getState().ensureBufferBound(target.gl, id);
-        GL15C.nglBufferSubData(target.gl, offset, ref.getSize(), ref.getAddress());
-        if(size > ref.getSize()) size = ref.getSize();
+        GL15C.nglBufferSubData(target.gl, offset, ref.getSize(), ref.getOffset());
     }
 
     @Override
