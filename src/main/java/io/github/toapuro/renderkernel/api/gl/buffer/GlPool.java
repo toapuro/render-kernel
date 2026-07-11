@@ -3,37 +3,59 @@ package io.github.toapuro.renderkernel.api.gl.buffer;
 import io.github.toapuro.renderkernel.api.util.FreeListAllocator;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class GlPool {
-    @Getter
-    private final GlGpuBuffer arena;
-    private final FreeListAllocator allocator;
+    private final List<Chunk> chunks = new ArrayList<>();
+
+    private long lastChunkCapacity;
 
     @Getter
     private long capacity;
 
     public GlPool(long initialSize) {
-        arena = new GlGpuBuffer(initialSize);
-        allocator = FreeListAllocator.create(initialSize);
+        lastChunkCapacity = initialSize;
         capacity = initialSize;
+
+        chunks.add(new Chunk(this, new GlGpuBuffer(initialSize), FreeListAllocator.create(initialSize)));
+    }
+
+    public Chunk growPool() {
+        lastChunkCapacity *= 2;
+        capacity += lastChunkCapacity;
+
+        Chunk chunk = new Chunk(this, new GlGpuBuffer(lastChunkCapacity), FreeListAllocator.create(lastChunkCapacity));
+        chunks.add(chunk);
+        return chunk;
     }
 
     public GlRegionBuffer suballoc(int size) {
-        long offset = allocator.allocate(size);
-        if(offset >= 0) {
-            return new GlRegionBuffer(this, offset, size);
+        for (Chunk chunk : chunks) {
+            long offset = chunk.allocator.allocate(size);
+            if (offset >= 0) {
+                return new GlRegionBuffer(chunk, offset, size);
+            }
         }
 
-        allocator.add(capacity, size);
-        capacity += size;
+        while (lastChunkCapacity < size) {
+            Chunk chunk = growPool();
 
-        // re-allocate
-
-        long newOffset = allocator.allocate(size);
-        if(newOffset < 0) throw new IllegalStateException("Could not sub-allocate");
-        return new GlRegionBuffer(this, newOffset, size);
+            long offset = chunk.allocator.allocate(size);
+            if (offset >= 0) {
+                return new GlRegionBuffer(chunk, offset, size);
+            }
+        }
+        throw new IllegalStateException("Unable to sub-allocate buffer region: size:" + size);
     }
 
     public void release(GlRegionBuffer buffer) {
-        allocator.release(buffer.getChunkOffset(), buffer.getCapacity());
+        if (!chunks.contains(buffer.getPoolChunk()))
+            throw new IllegalStateException("Buffer was allocated by another memory pool");
+
+        buffer.getPoolChunk().allocator().release(buffer.getChunkOffset(), buffer.getCapacity());
+    }
+
+    public record Chunk(GlPool pool, GlGpuBuffer buffer, FreeListAllocator allocator) {
     }
 }

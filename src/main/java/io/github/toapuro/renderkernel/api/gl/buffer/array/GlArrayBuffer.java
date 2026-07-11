@@ -9,11 +9,11 @@ public class GlArrayBuffer {
     private final int id = GL30.glGenVertexArrays();
 
     public static void unbind() {
-        GlApi.getState().ensureVertexArrayBound(0);
+        GlApi.state().ensureVertexArrayBound(0);
     }
 
     public void bind() {
-        GlApi.getState().ensureVertexArrayBound(id);
+        GlApi.state().ensureVertexArrayBound(id);
     }
 
     public void enableAttribute(int index) {

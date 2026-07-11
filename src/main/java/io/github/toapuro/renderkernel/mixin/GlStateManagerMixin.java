@@ -11,11 +11,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class GlStateManagerMixin {
     @Inject(method = "_glBindBuffer", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL15;glBindBuffer(II)V"))
     private static void _glBindBuffer(int pTarget, int pBuffer, CallbackInfo ci) {
-        GlApi.getState()._setBufferBound(pTarget, pBuffer);
+        GlApi.state()._setBufferBound(pTarget, pBuffer);
     }
 
     @Inject(method = "_glBindVertexArray", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL30;glBindVertexArray(I)V"))
     private static void _glBindVertexArray(int pArray, CallbackInfo ci) {
-        GlApi.getState()._setVertexArray(pArray);
+        GlApi.state()._setVertexArray(pArray);
     }
 }

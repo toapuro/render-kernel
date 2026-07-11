@@ -10,17 +10,17 @@ import static io.github.toapuro.renderkernel.api.gl.buffer.GlGpuBuffer.BufferUsa
 @RequiredArgsConstructor
 @Getter
 public final class GlRegionBuffer implements GlBuffer {
-    private final GlPool parentPool;
+    private final GlPool.Chunk poolChunk;
     private final long chunkOffset;
     private final long capacity;
 
     @Override
     public void bind(BufferTarget target) {
-        parentPool.getArena().bind(target);
+        poolChunk.buffer().bind(target);
     }
 
     public void upload(BufferTarget target, MemoryRef ref) {
-        parentPool.getArena().uploadSub(target, chunkOffset, ref);
+        poolChunk.buffer().uploadSub(target, chunkOffset, ref);
     }
 
     @Override
@@ -30,11 +30,11 @@ public final class GlRegionBuffer implements GlBuffer {
 
     @Override
     public void release() {
-        parentPool.release(this);
+        poolChunk.pool().release(this);
     }
 
     @Override
     public GlGpuRef ref() {
-        return GlGpuRef.ref(parentPool.getArena().getId(), chunkOffset, capacity);
+        return GlGpuRef.ref(poolChunk.buffer().getId(), chunkOffset, capacity);
     }
 }

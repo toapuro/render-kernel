@@ -23,7 +23,7 @@ public final class MemoryPool {
         chunks.add(new Chunk(this, KernelApi.allocateMemory(initialSize), FreeListAllocator.create(initialSize)));
     }
 
-    private Chunk expandChunk() {
+    private Chunk growPool() {
         lastChunkCapacity *= 2;
         capacity += lastChunkCapacity;
 
@@ -41,12 +41,15 @@ public final class MemoryPool {
             }
         }
 
-        Chunk newChunk = this.expandChunk();
+        while (lastChunkCapacity < size) {
+            Chunk chunk = growPool();
 
-        // re-allocate
-        long newOffset = newChunk.allocator.allocate(size);
-        if(newOffset < 0) throw new IllegalStateException("Could not sub-allocate");
-        return new MemoryRegionBuffer(newChunk, newChunk.buffer.getAddress() + newOffset, size);
+            long offset = chunk.allocator.allocate(size);
+            if (offset >= 0) {
+                return new MemoryRegionBuffer(chunk, offset, size);
+            }
+        }
+        throw new IllegalStateException("Unable to sub-allocate buffer region: size:" + size);
     }
 
     public void release(MemoryRegionBuffer regionBuffer) {

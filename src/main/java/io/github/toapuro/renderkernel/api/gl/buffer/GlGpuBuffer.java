@@ -19,7 +19,7 @@ public final class GlGpuBuffer implements GlBuffer {
 
     @Override
     public void bind(BufferTarget target) {
-        GlApi.getState().ensureBufferBound(target.gl, id);
+        GlApi.state().ensureBufferBound(target.gl, id);
     }
 
     @SneakyThrows
@@ -27,7 +27,7 @@ public final class GlGpuBuffer implements GlBuffer {
     public void upload(BufferTarget target, MemoryRef ref, BufferUsage usage) {
         if (ref.getSize() > size) throw new IllegalAccessException("Memory access out of range");
 
-        GlApi.getState().ensureBufferBound(target.gl, id);
+        GlApi.state().ensureBufferBound(target.gl, id);
         GL15C.nglBufferData(target.gl, ref.getSize(), ref.getOffset(), usage.gl);
     }
 
@@ -40,7 +40,7 @@ public final class GlGpuBuffer implements GlBuffer {
     public void uploadSub(BufferTarget target, long offset, MemoryRef ref) {
         if (ref.getOffset() + ref.getSize() > size) throw new IllegalAccessException("Memory access out of range");
 
-        GlApi.getState().ensureBufferBound(target.gl, id);
+        GlApi.state().ensureBufferBound(target.gl, id);
         GL15C.nglBufferSubData(target.gl, offset, ref.getSize(), ref.getOffset());
     }
 
