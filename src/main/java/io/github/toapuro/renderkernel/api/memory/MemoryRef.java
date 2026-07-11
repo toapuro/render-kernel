@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
 @AllArgsConstructor(staticName = "ref")
 @Getter
 public final class MemoryRef {
-    private final long address;
+    private final long offset;
     private final long size;
 
     public static MemoryRef bufferRef(ByteBuffer buffer) {
