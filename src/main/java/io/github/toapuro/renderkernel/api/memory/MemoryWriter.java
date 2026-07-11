@@ -6,7 +6,7 @@ import org.lwjgl.system.MemoryUtil;
 
 @AllArgsConstructor
 @Getter
-public final class MemoryStream {
+public final class MemoryWriter {
     private long pointer;
 
     public void skip(long bytes) {

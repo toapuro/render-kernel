@@ -14,7 +14,7 @@ public class MemoryBuffer {
         MemoryUtil.nmemFree(address);
     }
 
-    public MemoryStream stream() {
-        return new MemoryStream(address);
+    public MemoryWriter writer() {
+        return new MemoryWriter(address);
     }
 }
