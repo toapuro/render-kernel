@@ -4,6 +4,7 @@ import io.github.toapuro.renderkernel.api.gl.buffer.array.GlArrayBuffer;
 import io.github.toapuro.renderkernel.api.gl.buffer.array.GlAttributeType;
 import io.github.toapuro.renderkernel.api.gl.buffer.array.GlVertexElement;
 import io.github.toapuro.renderkernel.api.gl.enums.GlValueType;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Getter
+@EqualsAndHashCode
 public final class VertexLayout {
     private final List<GlVertexElement> elements;
     private final int[] pointers;
