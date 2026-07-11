@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11C;
 
 @Slf4j
 @Getter
-public class ElementsDrawPacket implements Dispatchable {
+public class ElementsDrawPacket implements Dispatchable, PoolingObject {
     private PipelineState state;
     private GlBuffer vertexBuffer;
     private GlBuffer indexBuffer;
@@ -42,6 +42,11 @@ public class ElementsDrawPacket implements Dispatchable {
         vertexBuffer.bind(GlGpuBuffer.BufferTarget.ARRAY_BUFFER);
         indexBuffer.bind(GlGpuBuffer.BufferTarget.ELEMENT_ARRAY_BUFFER);
         GL11C.nglDrawElements(polygon.getGl(), vertices, GlIndexType.fitFor(vertices).getGl(), ref.getOffset());
+    }
+
+    @Override
+    public void release() {
+        PacketObjectPools.ELEMENTS_POOL.release(this);
     }
 
     @RequiredArgsConstructor

@@ -19,6 +19,11 @@ public final class DrawQueue {
         // TODO: ソートや最適化
         for (Dispatchable packet : drawPackets) {
             packet.dispatch();
+            if (packet instanceof PoolingObject poolingObject) {
+                poolingObject.release();
+            }
         }
+
+        drawPackets.clear();
     }
 }
