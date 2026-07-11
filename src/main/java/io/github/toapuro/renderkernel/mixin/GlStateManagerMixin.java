@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(GlStateManager.class)
+@Mixin(value = GlStateManager.class, remap = false)
 public class GlStateManagerMixin {
     @Inject(method = "_glBindBuffer", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL15;glBindBuffer(II)V"))
     private static void _glBindBuffer(int pTarget, int pBuffer, CallbackInfo ci) {
