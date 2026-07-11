@@ -3,10 +3,11 @@
   "minVersion": "0.8",
   "package": "io.github.toapuro.renderkernel.mixin",
   "compatibilityLevel": "JAVA_17",
-  "refmap": "examplemod.refmap.json",
+  "refmap": "renderkernel.refmap.json",
   "mixins": [
   ],
   "client": [
+    "GlStateManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
